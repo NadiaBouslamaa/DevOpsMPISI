@@ -40,9 +40,9 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           mvn clean verify sonar:sonar \
-            -Dsonar.projectKey=NadiaBouslamaa_DevOpsMPISI \
-            -Dsonar.organization=nadiabouslamaa \
-            -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.projectKey=NadiaBouslamaa_DevOpsMPISI \
+          -Dsonar.organization=nadiabouslamaa \
+          -Dsonar.host.url=https://sonarcloud.io
 
 
       
