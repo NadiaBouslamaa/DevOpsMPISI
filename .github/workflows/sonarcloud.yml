@@ -1,25 +1,42 @@
 name: SonarCloud
+
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    types: [opened, synchronize, reopened]
 
 jobs:
-  sonarcloud:
+  build:
+    name: Build and analyze on SonarCloud
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+      - uses: actions/checkout@v3
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '17'
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-    - name: Build & Analyze
-      run: mvn clean verify sonar:sonar \
-        -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn clean verify sonar:sonar \
+             -Dsonar.projectKey=NadiaBouslamaa_DevOpsMPISI \
+             -Dsonar.organization=nadiabouslamaa \
+             -Dsonar.host.url=https://sonarcloud.io
