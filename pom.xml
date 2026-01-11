@@ -41,8 +41,8 @@
 
         <!-- SonarCloud Configuration -->
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.organization>amdouni-bilel</sonar.organization>
-        <sonar.projectKey>amdouni-bilel_DevOpsMPISI</sonar.projectKey>
+        <sonar.organization>nadiabouslamaa</sonar.organization>
+        <sonar.projectKey>NadiaBouslamaa_DevOpsMPISI</sonar.projectKey>
         <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
         <sonar.sources>src/main/java</sonar.sources>
         <sonar.tests>src/test/java</sonar.tests>
@@ -194,6 +194,12 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                             <formats>
+                                 <format>XML</format>
+                                 <format>HTML</format>
+                             </formats>
+                        </configuration>
                     </execution>
 
                     <!-- Vérification des seuils de couverture de code -->
@@ -276,6 +282,20 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <!-- Plugin SonarCloud -->
+             <plugin>
+                 <groupId>org.sonarsource.scanner.maven</groupId>
+                 <artifactId>sonar-maven-plugin</artifactId>
+                 <version>3.9.1.2184</version>
+             </plugin>
+             <!-- SonarCloud Maven Plugin -->
+            <plugin>
+                 <groupId>org.sonarsource.scanner.maven</groupId>
+                 <artifactId>sonar-maven-plugin</artifactId>
+                 <version>3.9.1.2184</version>
+            </plugin>
+
+
 
         </plugins>
     </build>
