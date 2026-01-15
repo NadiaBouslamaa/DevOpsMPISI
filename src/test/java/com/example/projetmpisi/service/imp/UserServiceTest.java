@@ -1,6 +1,5 @@
 package com.example.projetmpisi.service.imp;
 
-
 import com.example.projetmpisi.entity.User;
 import com.example.projetmpisi.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -8,16 +7,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Optional;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
     @InjectMocks
     private UserService userService;
 
@@ -27,39 +28,67 @@ class UserServiceTest {
 
     @Test
     void testSaveUser() {
-        User user = new User(1, "Bilel", "bilel@example.com");
+        User user = new User(1, "Nadia", "nadia@example.com");
+
         when(userRepository.save(user)).thenReturn(user);
+
         User saved = userService.saveUser(user);
-        assertEquals("Bilel", saved.getUsername());
+
+        assertNotNull(saved);
+        assertEquals("Nadia", saved.getUsername());
     }
 
     @Test
-    void testGetUserById() {
-        User user = new User(1, "Bilel", "bilel@example.com");
+    void testGetUserById_found() {
+        User user = new User(1, "Nadia", "nadia@example.com");
+
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
+
         Optional<User> result = userService.getUserById(1);
+
         assertTrue(result.isPresent());
-        assertEquals("bilel@example.com", result.get().getEmail());
+        assertEquals("nadia@example.com", result.get().getEmail());
+    }
+
+    @Test
+    void testGetUserById_notFound() {
+        when(userRepository.findById(1)).thenReturn(Optional.empty());
+
+        Optional<User> result = userService.getUserById(1);
+
+        assertFalse(result.isPresent());
     }
 
     @Test
     void testGetAllUsers() {
-        when(userRepository.findAll()).thenReturn(List.of(new User(1, "A", "a@a.com")));
+        when(userRepository.findAll())
+                .thenReturn(List.of(new User(1, "A", "a@a.com")));
+
         List<User> users = userService.getAllUsers();
+
         assertEquals(1, users.size());
     }
 
     @Test
     void testDeleteUser() {
         userService.deleteUser(1);
+
         verify(userRepository, times(1)).deleteById(1);
     }
 
+   
     @Test
-    void testGetUserById_notFound() {
-        when(userRepository.findById(1)).thenReturn(Optional.empty());
-        Optional<User> result = userService.getUserById(1);
-        assertFalse(result.isPresent());
+    void testUpdateUser() {
+        User updated = new User(1, "New", "new@mail.com");
+
+        // Mock repository
+        when(userRepository.existsById(1)).thenReturn(true);
+        when(userRepository.save(any(User.class))).thenReturn(updated);
+
+        User result = userService.updateUser(1, updated);
+
+        assertNotNull(result);
+        assertEquals("New", result.getUsername());
     }
 
 }
