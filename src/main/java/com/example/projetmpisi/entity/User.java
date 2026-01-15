@@ -19,9 +19,17 @@ public class User {
     public User() {
     }
 
+    // Constructeur 4 arguments (déjà utilisé par certains tests)
     public User(int id, String name, String username, String email) {
         this.id = id;
         this.name = name;
+        this.username = username;
+        this.email = email;
+    }
+
+    // **NOUVEAU** constructeur 3 arguments pour faire passer tous les tests existants
+    public User(int id, String username, String email) {
+        this.id = id;
         this.username = username;
         this.email = email;
     }
@@ -60,6 +68,7 @@ public class User {
         this.email = email;
     }
 }
+
 
 
 
